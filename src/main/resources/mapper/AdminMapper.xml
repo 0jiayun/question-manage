@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.questionairmanage.dao.AdminDao">
+
+
+    <resultMap id="QuestionMap" type="com.example.questionairmanage.model.Question">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="question" jdbcType="VARCHAR" property="question"/>
+    </resultMap>
+
+
+    <insert id="insertAdmin" keyProperty="adminId" useGeneratedKeys="true">
+        insert into admin(username,password,mail) values(#{username}, #{password},#{mail});
+    </insert>
+
+    <select id="listQuestion" resultMap="QuestionMap">
+        select * from question
+        <if test="name!=null">
+            where question like CONCAT(CONCAT('%',#{name},'%'))
+        </if>
+        <if test="start!=null">
+            limit #{start},#{number}
+        </if>
+    </select>
+
+    <insert id="insertQuestion" >
+        insert into question(id,question) values(#{id}, #{question});
+    </insert>
+
+    <update id="updateQuestion">
+        update question set question = #{question} where id = #{id};
+    </update>
+
+    <select id="selectAdmin" resultType="com.example.questionairmanage.model.Admin">
+        select * from admin where username = #{username}
+    </select>
+
+    <select id="getQuestionCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM question
+    </select>
+
+    <select id="getQuestionMaxId" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM question
+    </select>
+
+    <delete id="deleteQuestion" parameterType="java.lang.Integer">
+        delete  FROM question where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+</mapper>

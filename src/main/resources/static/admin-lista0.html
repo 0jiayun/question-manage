@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" type="text/css" href="./newlayui/css/layui.css"media="all">
+<script src="./newlayui/layui.js"></script>
+ <script type="text/javascript"src="./js/url.js"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <script>
+	function exportPoint() {
+		window.location.href=remoteUrl+"project/exportworkPoint.do"
+	
+		
+	}
+
+</script>
+<script>
+layui.use('upload', function(){
+  var upload = layui.upload;
+  var layer = layui.layer;
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#uploadExcel' //绑定元素
+   
+   ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		 layer.load(); //上传loading
+    }
+/*     ,before:function(obj){
+    	layer.load(
+    		2,
+    		{shade:false};)
+    } */
+    ,url: remoteUrl+'oriMilestone/import.do' //上传接口
+    ,accept: 'file' //普通文件
+    ,multiple: true
+    ,done: function(res){
+      layer.closeAll('loading'); //关闭loading
+      if(res.code==0){
+    	  layer.alert("导入成功");
+          reload();
+      }else{
+    	  layer.alert("导入失败，确认选择excel文件正确");
+      }
+      
+    	 
+    }
+    ,error: function(){
+    	 layer.closeAll('loading'); //关闭loading
+      layer.alert("导入失败，请确认选的是excel文件")
+    }
+  });
+  var uploadInst = upload.render({
+	    elem: '#uploadExcel2' //绑定元素
+	   
+	   ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+	    		 layer.load(); //上传loading
+	    }
+	/*     ,before:function(obj){
+	    	layer.load(
+	    		2,
+	    		{shade:false};)
+	    } */
+	    ,url: remoteUrl+'mainbuild/imports.do' //上传接口
+	    ,accept: 'file' //普通文件
+	    ,multiple: true
+	    ,done: function(res){
+	      layer.closeAll('loading'); //关闭loading
+	      if(res.code==0){
+	    	  layer.alert("导入成功");
+	          reload();
+	      }else{
+	    	  layer.alert("导入失败，确认选择excel文件正确");
+	      }
+	      
+	    	 
+	    }
+	    ,error: function(){
+	    	 layer.closeAll('loading'); //关闭loading
+	      layer.alert("导入失败，请确认选的是excel文件")
+	    }
+	  });
+
+  var uploadInst = upload.render({
+	    elem: '#uploadExcel3' //绑定元素
+	   
+	   ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+	    		 layer.load(); //上传loading
+	    }
+	/*     ,before:function(obj){
+	    	layer.load(
+	    		2,
+	    		{shade:false};)
+	    } */
+	    ,url: remoteUrl+'mainbuild/importe.do' //上传接口
+	    ,accept: 'file' //普通文件
+	    ,multiple: true
+	    ,done: function(res){
+	      layer.closeAll('loading'); //关闭loading
+	      if(res.code==0){
+	    	  layer.alert("导入成功");
+	          reload();
+	      }else{
+	    	  layer.alert("导入失败，确认选择excel文件正确");
+	      }
+	      
+	    	 
+	    }
+	    ,error: function(){
+	    	 layer.closeAll('loading'); //关闭loading
+	      layer.alert("导入失败，请确认选的是excel文件")
+	    }
+	  });
+});
+</script>
+</head>
+<body> 
+<button class="layui-btn layui-btn-normal  layui-btn-radius" onclick="importEXcel()"id="uploadExcel">
+  <i class="layui-icon">&#xe601;</i> 导入主网进度统计表
+</button>
+<button class="layui-btn layui-btn-normal  layui-btn-radius" onclick="importEXcel2()"id="uploadExcel2">
+  <i class="layui-icon">&#xe601;</i> 导入完工项目增资表
+</button>
+
+<button class="layui-btn layui-btn-normal  layui-btn-radius" onclick="importEXcel3()"id="uploadExcel3">
+  <i class="layui-icon">&#xe601;</i> 导入应结算增资项目情况表
+</button>
+
+
+ 
+<table class="layui-hide" id="demo" ></table> 
+               
+          
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+function reload() {
+	 var table = layui.table;
+	    table.reload('demo', {
+	    	  url: remoteUrl+'milestone/milepoint.do'
+	    	  ,where: {} //设定异步数据接口的额外参数
+	    	  //,height: 300
+	    	})
+	
+};
+
+layui.use('table', function(){
+  var table = layui.table;
+  
+  //方法级渲染
+  table.render({
+    elem: '#demo'
+    ,url: remoteUrl+'admin/getQuestions' //数据接口
+    ,page: true
+    ,limits:['10']
+    	 ,cols: [[ //表头
+    		 {field: 'id', title: '序号', width:150, sort: true, fixed: 'left'}
+    	     
+    	      ,{field: 'question', title: '问题内容', width:280}
+    	      
+    	    ]]
+    ,id: 'demo'
+   
+  
+  });
+  
+  var $ = layui.$, active = {
+    reload: function(){
+      var demoReload = $('#demoReload');
+      
+      //执行重载
+      table.reload('demo', {
+      
+        where: {
+          key: {
+            id: demoReload.val()
+          }
+        }
+      });
+    }
+  };
+  
+  $('.demoTable .layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+
+</body>
+</html>
